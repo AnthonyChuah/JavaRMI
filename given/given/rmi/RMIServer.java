@@ -8,6 +8,7 @@ import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.RemoteException;
+import java.rmi.RMISecurityManager;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 
@@ -40,14 +41,13 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 	}
 
 	public static void main(String[] args) {
-		RMIServer rmis = null;
 		if (System.getSecurityManager() == null) {
-		    System.setSecurityManager(new SecurityManager());
+		    System.setSecurityManager(new RMISecurityManager());
 		}
 		try {
 		    String name = "RMIServer";
 		    RMIServer myServer = new RMIServer();
-		    Registry registry = LocateRegistry.getRegistry(1099);
+		    Registry registry = LocateRegistry.createRegistry(1099);
 		    registry.rebind(name, myServer);
 		    System.out.println("Server ready");
 		} catch (Exception e) {

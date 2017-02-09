@@ -17,6 +17,7 @@ public class UDPServer {
     private DatagramSocket recvSoc;
     private int totalMessages = -1;
     private int[] receivedMessages;
+    private int total;
     private boolean close;
 
     private void run() {
@@ -38,7 +39,7 @@ public class UDPServer {
 		    processMessage(msg);
 		} catch (SocketTimeoutException e) {
 		    System.out.println("Socket timed out. Missing messages were: ");
-		    for (int i = 0; i < totalMessages; ++i) {
+		    for (int i = 0; i < total; ++i) {
 			if (receivedMessages[i] == 0) {
 			    System.out.print(i + " ");
 			}
@@ -58,7 +59,7 @@ public class UDPServer {
 	try {
 	    msg = new MessageInfo(data);
 	    int msgNum = msg.messageNum;
-	    int total = msg.totalMessages;
+	    total = msg.totalMessages;
 	    if (totalMessages < 0) {
 		++totalMessages;
 		receivedMessages = new int[total];

@@ -1,0 +1,2 @@
+Launched RMI Client.
+Sending 400 messages to server!
