@@ -25,8 +25,6 @@ public class UDPServer {
 	DatagramPacket 	pac;
 	pacSize = 256;
 	pacData = new byte[pacSize];
-	// TO-DO: Receive the messages and process them by calling processMessage(...).
-	//        Use a timeout (e.g. 30 secs) to ensure the program doesn't block forever
 	pac = new DatagramPacket(pacData, pacData.length);
 	int timeOut = 0;
 	try {
@@ -56,26 +54,19 @@ public class UDPServer {
 
     public void processMessage(String data) {
 	MessageInfo msg = null;
-	// System.out.println("Received message that looks like this: " + data);
-	// System.out.println("Trimming trailing blanks.");
-	data = data.trim(); // You need to trim trailing blanks for MessageInfo to parse.
-	// TO-DO: Use the data to construct a new MessageInfo object
+	data = data.trim(); // You need to trim trailing blanks for parsing.
 	try {
 	    msg = new MessageInfo(data);
 	    int msgNum = msg.messageNum;
 	    int total = msg.totalMessages;
-	    // TO-DO: On receipt of first message, initialise the receive buffer
 	    if (totalMessages < 0) {
 		++totalMessages;
 		receivedMessages = new int[total];
 	    }
-	    // TO-DO: Log receipt of the message
 	    receivedMessages[msgNum] = 1;
 	    System.out.println("Received message " + msgNum + " of total " + total);
 	    ++totalMessages;
 	    System.out.println("TotalMessages incremented to: " + totalMessages);
-	    // TO-DO: If this is the last expected message, then identify
-	    //        any missing messages
 	    if (msgNum == total - 1) {
 		System.out.println("Final message received. Missing messages were: ");
 		for (int i = 0; i < total; ++i) {
@@ -90,26 +81,22 @@ public class UDPServer {
     }
 
     public UDPServer(int rp) {
-	// TO-DO: Initialise UDP socket for receiving data
 	try {
 	    this.recvSoc = new DatagramSocket(rp);
 	} catch (SocketException e) {
 	    e.printStackTrace();
 	}
 	this.close = false;
-	// Done Initialisation
 	System.out.println("UDPServer ready");
     }
 
     public static void main(String args[]) {
 	int	recvPort;
-	// Get the parameters from command line
 	if (args.length < 1) {
 	    System.err.println("Arguments required: recv port");
 	    System.exit(-1);
 	}
 	recvPort = Integer.parseInt(args[0]);
-	// TO-DO: Construct Server object and start it by calling run().
 	try {
 	    UDPServer server = new UDPServer(recvPort);
 	    server.run();
@@ -118,5 +105,4 @@ public class UDPServer {
 	    e.printStackTrace();
 	}
     }
-
 }
